@@ -1,61 +1,51 @@
 <template>
-  
-  <ag-grid-vue
-    class="ag-theme-balham"
-    style="width: 1000px; height: 600px;" 
-    :columnDefs="columnDefs.value"
-    :rowData="rowData.value"
-    :defaultColDef="defaultColDef"
-    rowSelection="multiple"
-    animateRows="true"
-    pagination="true"
-    paginationAutoPageSize=true
+	<div class="app">
+		<!-- Sidebar -->
+		<Sidebar />
 
-  >
-  </ag-grid-vue>
+		<!-- Content -->
+		<router-view />
+	</div>
 </template>
 
-<script>
-import { AgGridVue } from "ag-grid-vue3";
-import { reactive, onMounted } from "vue";
-import "ag-grid-community/dist/styles/ag-grid.css";
-import "ag-grid-community/dist/styles/ag-theme-balham.css";
-
-
-export default {
-  name: "App",
-  components: { AgGridVue, },
-  setup() {
-    const rowData = reactive({
-      value: [ {},],
-    });
-
-    const columnDefs = reactive({
-      value: [{ field: "businessAccountNumber" }, { field: "businessName" }, { field: "businessType" }, 
-      { field: "businessCity" },{ field: "salesEmployee" },{ field: "businessPhoneNumber" },
-       { field: "businessLiquorLic" },{ field: "businessEmail" }],
-    });
-
-    const defaultColDef = {
-      sortable: true,
-      floatingFilter: true,
-      filter:true
-    };
-
-    onMounted(() => {
-      fetch("http://localhost:8888/business-accounts/all")
-        .then((result) => result.json())
-        .then((remoteRowData) => (rowData.value = remoteRowData)); 
-    });
-
-    return {
-      columnDefs,
-      rowData,
-      defaultColDef,
-    };
-
-  },
-};
+<script setup>
+import Sidebar from './components/Sidebar.vue'
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+:root {
+	--primary: #1385e2;
+	--primary-alt: #bebebee7;
+	--grey: #64748b;
+	--dark: #000000;
+	--dark-alt: #c0bba5;
+	--light: #abaca5;
+	--sidebar-width: 300px;
+}
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Fira sans', sans-serif;
+}
+body {
+	background: var(--light);
+}
+button {
+	cursor: pointer;
+	appearance: none;
+	border: none;
+	outline: none;
+	background: none;
+}
+.app {
+	display: flex;
+	main {
+		flex: 1 1 0;
+		padding: 2rem;
+		@media (max-width: 1024px) {
+			padding-left: 6rem;
+		}
+	}
+}
+</style>
